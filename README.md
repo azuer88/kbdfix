@@ -9,6 +9,7 @@ $ git clone https://www.github.com/azuer88/kbdfix.git
 $ cd kbdfix
 $ mkdir build && cd $_
 $ cmake .. & sudo make install
+```
 
 this will install the kbdfix into the /usr/sbin and modify /etc/rc.local to call /usr/sbin/kbdfix.  it will also install /etc/pm/sleep.d so that when the machine resumes from sleep, it will reactivate the keyboard.
 
