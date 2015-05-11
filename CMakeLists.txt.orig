@@ -1,0 +1,56 @@
+cmake_minimum_required (VERSION 2.6)
+project (kbdfix)
+# The version number.
+set (kbdfix_VERSION_MAJOR 0)
+set (kbdfix_VERSION_MINOR 1)
+
+# configure a header file to pass some of the CMake settings
+# to the source code
+configure_file (
+    "${PROJECT_SOURCE_DIR}/kbdfixConfig.h.in"
+    "${PROJECT_BINARY_DIR}/kbdfixConfig.h"
+    )
+# copy /etc/rc.local 
+#configure_file (
+#    "/etc/rc.local"
+#    "${PROJECT_BINARY_DIR}/rc.local"
+#    COPYONLY
+#    )
+
+set(SCRIPT_DIR ${PROJECT_SOURCE_DIR}/scripts)
+set(RC_LOCAL ${SCRIPT_DIR}/etc/rc.local)
+file(REMOVE ${RC_LOCAL})
+file(STRINGS /etc/rc.local rc_local_strings)
+foreach(line ${rc_local_strings})
+    if (line MATCHES "^exit.*$")
+        file(APPEND ${RC_LOCAL} "\n/usr/sbin/kbdfix\n")
+    endif (line MATCHES "^exit.*$")
+    file(APPEND ${RC_LOCAL} "${line}\n")
+endforeach(line)
+# INSTALL_PROGRAMS(${SCRIPT_DIR} etc/*)
+
+
+# add the binary tree to the search path for include files
+# so that we will find kbdfixConfig.h
+include_directories("${PROJECT_BINARY_DIR}")
+
+
+# add the executable 
+add_executable(kbdfix kbdfix.c)
+
+# add the install targets
+install(TARGETS kbdfix DESTINATION /usr/sbin
+    PERMISSIONS WORLD_EXECUTE 
+    OWNER_EXECUTE OWNER_READ OWNER_WRITE
+    GROUP_EXECUTE GROUP_READ GROUP_WRITE)
+install(PROGRAMS ${RC_LOCAL} DESTINATION /etc 
+    PERMISSIONS WORLD_EXECUTE 
+    OWNER_EXECUTE OWNER_READ OWNER_WRITE
+    GROUP_EXECUTE GROUP_READ GROUP_WRITE)
+install(PROGRAMS ${SCRIPT_DIR}/99-kbdfix DESTINATION /etc/pm/sleep.d
+    PERMISSIONS WORLD_EXECUTE 
+    OWNER_EXECUTE OWNER_READ OWNER_WRITE
+    GROUP_EXECUTE GROUP_READ GROUP_WRITE)
+
+#install (FILES "${PROJECT_BINARY_DIR}/kbdfixConfig.h" DESTINATION include)
+

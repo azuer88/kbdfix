@@ -1,0 +1,4 @@
+// the configured options and settings for kbdfix
+#define kbdfix_VERSION_MAJOR @kbdfix_VERSION_MAJOR@
+#define kbdfix_VERSION_MINOR @kbdfix_VERSION_MINOR@
+
