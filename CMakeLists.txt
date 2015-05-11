@@ -21,7 +21,7 @@ add_executable(kbdfix kbdfix.c)
 
 # add the install targets
 install(TARGETS kbdfix DESTINATION /usr/sbin
-    PERMISSIONS WORLD_EXECUTE 
+    PERMISSIONS SETUID WORLD_EXECUTE 
     OWNER_EXECUTE OWNER_READ OWNER_WRITE
     GROUP_EXECUTE GROUP_READ GROUP_WRITE)
 #install(SCRIPT ${CMAKE_SOURCE_DIR}/PostInstall.cmake)
