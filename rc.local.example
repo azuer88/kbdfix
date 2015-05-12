@@ -1,0 +1,9 @@
+#!/bin/sh -e
+
+
+exec 2> /tmp/rc.local.log
+exec 1>&2
+set -x
+
+/usr/sbin/kbdfix
+exit 0
