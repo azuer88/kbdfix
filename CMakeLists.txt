@@ -16,15 +16,41 @@ configure_file (
 include_directories("${PROJECT_BINARY_DIR}")
 
 
+set(RC_LOCAL ${PROJECT_BINARY_DIR}/rc.local)
+set(99_KBDFIX ${PROJECT_SOURCE_DIR}/99-kbdfix)
+add_custom_target(generate
+    COMMAND     head "/etc/rc.local" -n -1 > "${RC_LOCAL}"
+    COMMAND     echo "/usr/bin/kbdfix\\nexit 0" >> "${RC_LOCAL}"
+    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+    COMMENT     "Generate rc.local"
+    VERBATIM
+  )
+
+#add_custom_target(rc.local 
+#    #add_custom_command(
+#    #OUTPUT  rc.local
+#    COMMAND head /etc/rc.local -n -1 > rc.local 
+#    COMMAND echo -e "/usr/bin/kbdfix\nexit 0" >> rc.local
+#    BYPRODUCTS rc.local
+#    COMMENT "create rc.local"
+#    )
+
 # add the executable 
 add_executable(kbdfix kbdfix.c)
+
+add_dependencies(kbdfix generate)
 
 # add the install targets
 install(TARGETS kbdfix DESTINATION /usr/sbin
     PERMISSIONS WORLD_EXECUTE 
     OWNER_EXECUTE OWNER_READ OWNER_WRITE
     GROUP_EXECUTE GROUP_READ GROUP_WRITE)
-#install(SCRIPT ${CMAKE_SOURCE_DIR}/PostInstall.cmake)
-add_custom_command(TARGET kbdfix POST_BUILD
-    COMMAND ${PROJECT_SOURCE_DIR}/PostInstall.sh
-    )
+
+install(PROGRAMS ${RC_LOCAL} DESTINATION /etc
+    PERMISSIONS WORLD_EXECUTE
+    OWNER_EXECUTE OWNER_READ OWNER_WRITE
+    GROUP_EXECUTE GROUP_READ GROUP_WRITE)
+install(PROGRAMS ${99_KBDFIX} DESTINATION /etc/pm/sleep.d
+    PERMISSIONS WORLD_EXECUTE
+    OWNER_EXECUTE OWNER_READ OWNER_WRITE
+    GROUP_EXECUTE GROUP_READ GROUP_WRITE)
