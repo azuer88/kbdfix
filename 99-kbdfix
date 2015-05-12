@@ -1,0 +1,7 @@
+#!/bin/bash
+
+case "" in
+    resume|thaw)
+        /usr/sbin/kbdfix
+    ;;
+esac
