@@ -20,7 +20,7 @@ set(RC_LOCAL ${PROJECT_BINARY_DIR}/rc.local)
 set(99_KBDFIX ${PROJECT_SOURCE_DIR}/99-kbdfix)
 add_custom_target(generate
     COMMAND     head "/etc/rc.local" -n -1 > "${RC_LOCAL}"
-    COMMAND     echo "/usr/bin/kbdfix\\nexit 0" >> "${RC_LOCAL}"
+    COMMAND     echo "/usr/sbin/kbdfix\\nexit 0" >> "${RC_LOCAL}"
     WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
     COMMENT     "Generate rc.local"
     VERBATIM

@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
 
     if (!dev_port) {
         printf("sorry, can't open '%s', you may not have permission.\n", DEV_PORT);
-        return 0;
+        return -1;
     }
 
     if ((argc == 2) && (argv[1][0] == '0'))
