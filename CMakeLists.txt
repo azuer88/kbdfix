@@ -7,7 +7,7 @@ set (kbdfix_VERSION_MINOR 1)
 # configure a header file to pass some of the CMake settings
 # to the source code
 configure_file (
-    "${PROJECT_SOURCE_DIR}/kbdfixConfig.h.in"
+    "${PROJECT_SOURCE_DIR}/src/kbdfixConfig.h.in"
     "${PROJECT_BINARY_DIR}/kbdfixConfig.h"
     )
 
@@ -17,7 +17,7 @@ include_directories("${PROJECT_BINARY_DIR}")
 
 
 set(RC_LOCAL ${PROJECT_BINARY_DIR}/rc.local)
-set(99_KBDFIX ${PROJECT_SOURCE_DIR}/99-kbdfix)
+set(99_KBDFIX ${PROJECT_SOURCE_DIR}/scripts/99-kbdfix)
 add_custom_target(generate
     COMMAND     head "/etc/rc.local" -n -1 > "${RC_LOCAL}"
     COMMAND     echo "/usr/sbin/kbdfix\\nexit 0" >> "${RC_LOCAL}"
@@ -36,7 +36,7 @@ add_custom_target(generate
 #    )
 
 # add the executable 
-add_executable(kbdfix kbdfix.c)
+add_executable(kbdfix src/kbdfix.c)
 
 add_dependencies(kbdfix generate)
 
